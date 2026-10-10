@@ -1,0 +1,14 @@
+# Binários compilados
+desafio
+*.exe
+
+# Arquivos de runtime / progresso dos alunos
+workspace/.progress.json
+.progress.json
+
+# IDEs e temporários
+.vscode/
+.idea/
+*.swp
+*~
+workspace/
