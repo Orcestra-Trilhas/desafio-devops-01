@@ -12,3 +12,6 @@ workspace/.progress.json
 *.swp
 *~
 workspace/
+
+# Gabarito (uso interno dos corretores)
+GABARITO.md
