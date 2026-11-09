@@ -1,0 +1,62 @@
+name: "CI - Desafio DevOps 02"
+
+on:
+  push:
+    paths:
+      - 'desafio-02/**'
+  pull_request:
+    paths:
+      - 'desafio-02/**'
+  workflow_dispatch:
+
+jobs:
+  validate-infra:
+    name: "Validar Infraestrutura e Testes"
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: desafio-02
+
+    steps:
+      - name: "Checkout do Repositório"
+        uses: actions/checkout@v4
+
+      - name: "Gerar Certificados SSL"
+        run: |
+          chmod +x nginx/certs/generate-certs.sh
+          ./nginx/certs/generate-certs.sh
+
+      - name: "Configurar Variáveis de Ambiente"
+        run: |
+          cp .env.example .env
+
+      - name: "Validar Sintaxe do Docker Compose"
+        run: |
+          docker compose config
+
+      - name: "Subir Stack de Infraestrutura"
+        run: |
+          docker compose up -d
+          echo "Aguardando inicialização dos containers..."
+          sleep 10
+
+      - name: "Executar Bateria de Testes Automatizados"
+        run: |
+          chmod +x scripts/test.sh
+          ./scripts/test.sh
+
+      - name: "Exibir Logs em Caso de Falha"
+        if: failure()
+        run: |
+          echo "=== LOGS DO PROXY NGINX ==="
+          docker compose logs proxy
+          echo "=== LOGS DO POSTGRES ==="
+          docker compose logs database
+          echo "=== LOGS DO REDIS ==="
+          docker compose logs cache
+
+      - name: "Encerrar Infraestrutura"
+        if: always()
+        run: |
+          docker compose down -v

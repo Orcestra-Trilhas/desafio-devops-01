@@ -3,15 +3,25 @@ desafio
 *.exe
 
 # Arquivos de runtime / progresso dos alunos
-workspace/.progress.json
+workspace/
+desafio-01/workspace/
 .progress.json
+*.progress.json
+
+# Desafio 02 runtime / secrets
+desafio-02/.env
+desafio-02/data/
+desafio-02/nginx/certs/*.key
+desafio-02/nginx/certs/*.crt
 
 # IDEs e temporários
 .vscode/
 .idea/
 *.swp
 *~
-workspace/
+skills/
 
 # Gabarito (uso interno dos corretores)
 GABARITO.md
+desafio-01/GABARITO.md
+desafio-02/GABARITO.md
